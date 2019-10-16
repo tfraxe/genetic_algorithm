@@ -43,6 +43,11 @@ int main()
 
 */
 	std::cout << crossover(gen_state(), gen_state()) << '\n';
+	
+	std::cout << "antes da mutação: " << tab << '\n';
+	mutation(tab);
+	std::cout << "depois da mutação: " << tab << '\n';	
+
 	return 0;
 
 }

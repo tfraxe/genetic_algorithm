@@ -3,7 +3,7 @@
 
 #include "queens.hpp"
 
-#define SIZE_P 4
+#define SIZE_P 1000 
 using populacao = std::array<tabuleiro, SIZE_P>;
 
 std::array<unsigned int, SIZE_P> prep_accumulate(populacao& pop)
@@ -42,8 +42,8 @@ unsigned int selection(const std::array<unsigned int, SIZE_P>& acc)
 tabuleiro crossover(const tabuleiro& tab1, const tabuleiro& tab2)
 {
 
-	std::cout << "tab1 = " << tab1 << '\n';
-	std::cout << "tab2 = " << tab2 << '\n';
+	//std::cout << "tab1 = " << tab1 << '\n';
+	//std::cout << "tab2 = " << tab2 << '\n';
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
 	
@@ -55,18 +55,18 @@ tabuleiro crossover(const tabuleiro& tab1, const tabuleiro& tab2)
 	do { alB = dis(gen); } while( alA == alB);
 	if (alA > alB) std::swap(alA, alB);
 
-	std::cout << "al : " << alA << " alB: " << alB << '\n';
+	//std::cout << "al : " << alA << " alB: " << alB << '\n';
 
 	std::array<bool, SIZE> cortados;
 	std::fill(cortados.begin(), cortados.end(), false);
 
 	std::for_each(tab1.begin() + alA, tab1.begin() + alB + 1, [&cortados](linha l) {cortados[l] = true;} );									
 						
-	for (auto& c : cortados) std::cout << c << " ";
-	std::cout << '\n';
+	//for (auto& c : cortados) std::cout << c << " ";
+	//std::cout << '\n';
 	tabuleiro filho;
 	std::copy(tab1.begin() + alA, tab1.begin() + alB + 1, filho.begin() + alA);
-	std::cout << "copy : " << filho << '\n';
+	//std::cout << "copy : " << filho << '\n';
 	
 	{
 		auto it_filho = filho.begin();
@@ -85,10 +85,41 @@ tabuleiro crossover(const tabuleiro& tab1, const tabuleiro& tab2)
 
 	}
 
-	std::cout << "filho: " << filho << '\n';
+	//std::cout << "filho: " << filho << '\n';
 	return filho;
 	
 	
+
+}
+
+void mutation(tabuleiro& tab)
+{
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<> dis(0, SIZE - 1);
+	
+	unsigned int alA = dis(gen);
+	unsigned int alB;
+
+	do {alB = dis(gen);} while(alB == alA);
+	
+	std::swap(tab[alA], tab[alB]);
+
+}
+
+void run(populacao& pop, populacao& nova_pop, unsigned int i)
+{
+	static std::array<unsigned int, SIZE_P> acc = prep_accumulate(pop);
+	unsigned int parent1 = selection(acc);
+	unsigned int parent2 = selection(acc);
+			
+	tabuleiro filho = crossover(pop[parent1], pop[parent2]);
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_real_distribution<> dis(0, 1);
+	if (dis(gen) <= 0.01) mutation(filho);		
+	nova_pop[i] = filho;	
+
 
 }
 

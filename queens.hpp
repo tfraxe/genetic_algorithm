@@ -8,11 +8,11 @@
 #include <thread>
 #include <mutex>
 #include <cmath>
-#define SIZE 8
+#define SIZE 40 
 using linha = unsigned char;
 using tabuleiro = std::array<linha, SIZE>;
 using posicao = std::array<unsigned char, 2>;
-using fitness_value = unsigned char;
+using fitness_value = unsigned short int;
 linha gen_rand_linha()
 {
 	static std::random_device rd;
