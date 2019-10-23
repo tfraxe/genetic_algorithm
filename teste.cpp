@@ -3,6 +3,8 @@
 #include <functional>
 #include "queens.hpp"
 #include "genetic.hpp"
+#include <queue>
+
 int main()
 {
 	tabuleiro tab = gen_state();
@@ -42,12 +44,25 @@ int main()
 		std::cout << selection(acc) << '\n';
 
 */
+	/*
 	std::cout << crossover(gen_state(), gen_state()) << '\n';
 	
 	std::cout << "antes da mutação: " << tab << '\n';
 	mutation(tab);
 	std::cout << "depois da mutação: " << tab << '\n';	
+*/
 
-	return 0;
+
+		populacao p1;
+		std::generate(p1.begin(), p1.end(), gen_state);
+	
+		for (auto p : p1) std::cout << fitness(p) << '\n';
+		
+		std::nth_element(p1.begin(), p1.begin() + 5, p1.end(), [](const tabuleiro& t1, const tabuleiro& t2){return fitness(t1) > fitness(t2);});
+	
+		std::cout << '\n';
+		for (auto p : p1) std::cout << fitness(p) << '\n';		
+
+		return 0;
 
 }

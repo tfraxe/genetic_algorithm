@@ -113,12 +113,26 @@ void run(populacao& pop, populacao& nova_pop, unsigned int i)
 	unsigned int parent1 = selection(acc);
 	unsigned int parent2 = selection(acc);
 			
-	tabuleiro filho = crossover(pop[parent1], pop[parent2]);
+	//tabuleiro filho = crossover(pop[parent1], pop[parent2]);
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
 	static std::uniform_real_distribution<> dis(0, 1);
-	if (dis(gen) <= 0.01) mutation(filho);		
-	nova_pop[i] = filho;	
+	tabuleiro filho1;
+	tabuleiro filho2;	
+	if (dis(gen) <= 0.65)
+	{	
+		filho1 = crossover(pop[parent1], pop[parent2]);
+		filho2 = crossover(pop[parent2], pop[parent1]);
+	}
+	else 
+	{
+		filho1 = pop[parent1];
+		filho2 = pop[parent2];
+	}
+	if (dis(gen) <= 0.1) mutation(filho1);
+	if (dis(gen) <= 0.1) mutation(filho2);		
+	nova_pop[i] = filho1;
+	nova_pop[i+1] = filho2;	
 
 
 }
